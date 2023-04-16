@@ -7,15 +7,16 @@
 #include <thread>
 #include<tuple>
 
-#define READ_FREQUENCY 1 //Per Minutes
+#define READ_FREQUENCY 2 //Per Minutes
 using namespace std;
-using namespace std::chrono_literals;
 
 class grabber{
     Byte getRandData();
+    int dataCounter;
     public:
         tuple<int,Byte> readData();
-        
+        grabber();
+
 
 };
 #endif

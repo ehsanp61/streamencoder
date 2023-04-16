@@ -1,9 +1,10 @@
 #include<iostream>
 #define CXX_STANDARD 17 // C++ version
 #include "tractive.h"
-#define WAIT_FOR_SEND 10 // in Second
+#define WAIT_FOR_SEND 20 // in Second
 #include <thread>
 #include <memory>
+#include <chrono>
 using namespace std;
 
 int main(int argc, int* args){
@@ -12,42 +13,48 @@ int main(int argc, int* args){
     auto grabberRunner = [&](){
             while(1){
             try{
-                if(oTractive->writeFlash(oTractive->oGrabber.readData())!=0)cout << "Mis Data!!" << endl;
-            }catch(Exception){
-                cout << "Exception in grabberRunner!!!"
+                if(oTractive->writeFlash(oTractive->oGrabber.readData())!=0)cout << "Miss Data!!" << endl;
+            }catch(exception){
+                cout << "Exception in grabberRunner!!!";
             }
         }
-    }
+    };
 
     auto gsmRunner = [&](){
             while(1){
             try{
                 if(!oTractive->readyToSend){
-                    std::this_thread::sleep_for(WAIT_FOR_SEND chrono_literals::s);
+                    std::this_thread::sleep_for(chrono::milliseconds(WAIT_FOR_SEND)); //seconds
+                    cout << "Try To Send!!!" << endl;
                     continue;
                 }
-                do{
-                    auto dataPack = oTractive->readFlash();                    
+                while(1){
+                    auto dataPack = oTractive->readFlash();
                     if(get<0>(dataPack) == ENDOFREAD){
                         //End of coding and start sending
+                        cout << "Reach to End for send" << endl;
                         oTractive->oGsm.endStream();
-                        oTractive->oGsm.send();
+                        oTractive->oGsm.send(0);
+                        cout << "Sent To Out" << endl;
                         break;
                     }else{
-                        oTractive->oGsm->loadData(dataPack);
+                        oTractive->oGsm.loadData(dataPack);
+                        cout << "load Data For send" << endl;
                     }
-                }while(1)
-                
-            }catch(Exception){
-                cout << "Exception in grabberRunner!!!"
+                }
+            }catch(exception){
+                cout << "Exception in grabberRunner!!!";
             }
         }
-    }
+    };
 
     thread grabberThread(grabberRunner);
+    thread gsmTransmitterThread(gsmRunner);
 
-    cout << "Hello Encoder";
+    cout << "Tractive Start!" << endl;
     grabberThread.join();
+    gsmTransmitterThread.join();
+    cout << "Tractive Stop!" << endl;
     return 0;
 }
 

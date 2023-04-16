@@ -4,6 +4,7 @@
 #include <iostream>
 #include <deque>
 #include <tuple>
+#include <vector>
 #include "baseType.h"
 #include "encoder.h"
 
@@ -11,11 +12,13 @@ using namespace std;
 class gsmTransmitter{
     deque<Byte> transmitterBuffer;
     encoder oEncoder;
+    bool state;
+    int dataCounter;
     public:
         gsmTransmitter();
-        void send(void);
-        deque<Byte> loadData(tuple<int,Byte> dataIn); 
-        deque<Byte> endStream(void);
+        vector<Byte> send(int);
+        void loadData(tuple<int,Byte> dataIn);
+        void endStream(void);
 
 };
 #endif

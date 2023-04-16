@@ -1,0 +1,55 @@
+# depslib dependency file v1.0
+1681683052 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\encoder.cpp
+	"encoder.h"
+
+1681682608 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\encoder.h
+	<deque>
+	<array>
+	<iostream>
+	"baseType.h"
+
+1681545775 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\basetype.h
+
+1681671674 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\tractive.cpp
+	"tractive.h"
+
+1681672173 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\tractive.h
+	"grabber.h"
+	"gsmTransmitter.h"
+	"baseType.h"
+	<tuple>
+	<array>
+
+1681668592 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\grabber.h
+	<iostream>
+	"baseType.h"
+	<chrono>
+	<thread>
+	<tuple>
+
+1681682111 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\gsmtransmitter.h
+	<iostream>
+	<deque>
+	<tuple>
+	<vector>
+	"baseType.h"
+	"encoder.h"
+
+1681678505 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\gsmtransmitter.cpp
+	"gsmTransmitter.h"
+
+1681682602 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\runner.cpp
+	<iostream>
+	"tractive.h"
+	<thread>
+	<memory>
+	<chrono>
+
+1681679115 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\grabber.cpp
+	"grabber.h"
+
+1681682594 source:j:\armchain\codes\mainsamples\tractive\streamencoder\test\unittest\grabbertest.cpp
+	"grabber.h"
+	"tractive.h"
+	"gsmTransmitter.h"
+

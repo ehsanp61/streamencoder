@@ -2,8 +2,14 @@
 
 
 tractive::tractive(){
-    flash.fill(0);    
+    flash.fill(0);
     bufPhase = 0;
+    sent = true;
+    readyToSend = false;
+    bufReadPos = bufPhase == 1 ? 0 : FLASH_SIZE/2;
+    bufWritePos = bufPhase == 1 ? FLASH_SIZE/2 : 0;
+    flashOverflow=false;
+
 }
 
 /**
@@ -18,7 +24,7 @@ tuple<int,Byte> tractive::readFlash(void){
     if(readyToSend)readyToSend=false;
     if(endOfFlashForRead()){
         sent = true;
-        return {ENDOFREAD,0}
+        return {ENDOFREAD,0};
     }
     dataPack[0] = flash.at(bufReadPos++);
     dataPack[1] = flash.at(bufReadPos++);
@@ -34,7 +40,7 @@ tuple<int,Byte> tractive::readFlash(void){
 }
 
 /**
- * 
+ *
 */
 int tractive::writeFlash(tuple<int,Byte> dataIn){
     Byte  bytes[5];
@@ -46,39 +52,40 @@ int tractive::writeFlash(tuple<int,Byte> dataIn){
     if(endOfFlashForWrite()){
         phaseChange();
     }
-    if(flashOverflow){ 
+    if(flashOverflow){
         return 1;
     }
-    else{        
+    else{
         flash.at(bufWritePos++) = bytes[0];
         flash.at(bufWritePos++) = bytes[1];
         flash.at(bufWritePos++) = bytes[2];
         flash.at(bufWritePos++) = bytes[3];
-        flash.at(bufWritePos++) = bytes[4];        
+        flash.at(bufWritePos++) = bytes[4];
     }
     return 0;
 }
 
 /**
- * 
+ *
 */
 bool tractive::phaseChange(void){
     if(sent){
-            bufReadPos = bufPhase == 0 ? 0 : FLASH_SIZE/2;
-            bufWritePos = bufPhase == 0 ? FLASH_SIZE/2 : 0;
             bufPhase = bufPhase == 1 ? 0 : 1;
-            readyToSend = true;
+            bufReadPos = bufPhase == 1 ? 0 : FLASH_SIZE/2;
+            bufWritePos = bufPhase == 1 ? FLASH_SIZE/2 : 0;
+
             sent = false;
+            readyToSend = true;
             flashOverflow=false;
             return true;
     }else{
             flashOverflow=true;
-            cout << "Miss Data(Flash Overflow)!!";
+            cout << "Miss Data(Flash Overflow)!!" << endl;
             return false;
     }
 }
 /**
- * 
+ *
 */
 bool tractive::endOfFlashForWrite(void){
     if(bufPhase==0){
@@ -94,7 +101,7 @@ bool tractive::endOfFlashForWrite(void){
     }
 }
 /**
- * 
+ *
 */
 bool tractive::endOfFlashForRead(void){
     if(bufPhase==1){
@@ -108,4 +115,17 @@ bool tractive::endOfFlashForRead(void){
         else
             return false;
     }
+}
+
+
+//Test Methods
+bool tractive::test_init(){
+    bool result = true;
+
+    if(bufPhase != 0) result = false;
+    if(bufReadPos != FLASH_SIZE/2) result = false;
+    if(bufWritePos != 0) result = false;
+    if(flashOverflow != false) result = false;
+
+    return result;
 }
