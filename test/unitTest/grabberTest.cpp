@@ -15,7 +15,7 @@ bool testGetData(){
     tuple<int,Byte> data, dataPre;
     for(int i = 0 ; i < 10 ; i++){
         data = oGrabber.readData();
-        cout << "i:"<< i << " " <<get<0>(data) << " ** " << (int)get<1>(data) << endl;
+        //cout << "i:"<< i << " " <<get<0>(data) << " ** " << (int)get<1>(data) << endl;
         if(i>0)
             if(get<0>(data) - get<0>(dataPre)!=READ_FREQUENCY)result = false;
         dataPre = data;
@@ -78,6 +78,7 @@ bool testTractive_writeReadFlash(){
 }
 
 bool testGsmTransmitter_loadData(){
+    //without Huffman Tier
     bool result = true;
     int i;
     gsmTransmitter oGsm;
@@ -115,21 +116,49 @@ bool test_encoderHuffman(){
     bool result = true;
 
     encoder oEncoder;
-    oEncoder.makeHuffmanCode();
+    result = oEncoder.test_huffmanCode();
 
     return result;
 }
-/*
+
+bool testGsmTransmitter_huffmanCode(){
+    bool result = true;
+    int i;
+    gsmTransmitter oGsm;
+    for(i = 1 ; i < 2 ; i ++){
+        oGsm.loadData({i,0});
+    }
+    for(i = 1 ; i < 51 ; i ++){
+        oGsm.loadData({i,110});
+    }
+    for(i = 1 ; i < 2 ; i ++){
+        oGsm.loadData({i,2});
+    }
+    oGsm.endStream();
+    vector<Byte> outStream = oGsm.send(1);
+    if(outStream.size()>0){
+        if(outStream.at(3) != 1)result = false;
+        if(outStream.at(4) != 0)result = false;
+        if(outStream.at(5) != 254)result = false;
+        if(outStream.at(6) != 158)result = false;
+        if(outStream.at(7) != 43)result = false;
+        if(outStream.at(8) != 40)result = false;
+    }
+    return result;
+}
+
 int main(){
     //bool test1 = false;
     //cout << "Test1 State:" << test1 << endl;
-    //IS_TRUE(testGetData());
-    //testTractive_init();
-    //IS_TRUE(testTractive_writeFlash());
-    //IS_TRUE(testTractive_writeReadFlash());
-    //IS_TRUE(testGsmTransmitter_loadData());
+    IS_TRUE(testGetData());
+    testTractive_init();
+    IS_TRUE(testTractive_writeFlash());
+    IS_TRUE(testTractive_writeReadFlash());
+    IS_TRUE(testGsmTransmitter_loadData());
     IS_TRUE(test_encoderHuffman());
+    IS_TRUE(testGsmTransmitter_huffmanCode());
+
     return 0;
 
 }
-*/
+

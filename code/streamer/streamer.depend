@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1681683052 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\encoder.cpp
+1681710433 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\encoder.cpp
 	"encoder.h"
 
-1681682608 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\encoder.h
+1681711108 j:\armchain\codes\mainsamples\tractive\streamencoder\code\include\encoder.h
 	<deque>
 	<array>
 	<iostream>
@@ -38,17 +38,17 @@
 1681678505 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\gsmtransmitter.cpp
 	"gsmTransmitter.h"
 
-1681682602 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\runner.cpp
+1681704824 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\runner.cpp
 	<iostream>
 	"tractive.h"
 	<thread>
 	<memory>
 	<chrono>
 
-1681679115 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\grabber.cpp
+1681710591 source:j:\armchain\codes\mainsamples\tractive\streamencoder\code\src\grabber.cpp
 	"grabber.h"
 
-1681682594 source:j:\armchain\codes\mainsamples\tractive\streamencoder\test\unittest\grabbertest.cpp
+1681711071 source:j:\armchain\codes\mainsamples\tractive\streamencoder\test\unittest\grabbertest.cpp
 	"grabber.h"
 	"tractive.h"
 	"gsmTransmitter.h"

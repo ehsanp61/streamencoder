@@ -17,8 +17,12 @@ deque<Byte> encoder::importData(Byte symbolIn){
     if(runCount>50)huffPossible = false;
     encodedSymbol = rleTier(symbol);
     if(encodedSymbol.size()>0)
-        if(HUFFMAN_TIER && huffPossible)
-           encodedSymbol =  huffmanTier(encodedSymbol);
+        if(HUFFMAN_TIER){
+            if(huffPossible)
+                encodedSymbol =  huffmanTier(encodedSymbol);
+            else
+                encodedSymbol.push_front(255);
+        }
 
     return encodedSymbol;
 }
@@ -27,9 +31,18 @@ deque<Byte> encoder::importData(Byte symbolIn){
 */
 deque<Byte> encoder::endStream(){
     deque<Byte> outputSymbol;
+    bool huffPossible = true;
     outputSymbol.push_back((runCount >> 8) & 0XFF);
     outputSymbol.push_back((runCount >> 0) & 0XFF);
     outputSymbol.push_back(currectSymbol);
+    if(runCount>50)huffPossible = false;
+    if(outputSymbol.size()>0)
+        if(HUFFMAN_TIER){
+            if(huffPossible)
+                outputSymbol =  huffmanTier(outputSymbol);
+            else
+                outputSymbol.push_front(255);
+        }
     currectSymbol = 0;
     runCount = 0;
     return outputSymbol;
@@ -82,11 +95,11 @@ void encoder::makeHuffmanCode(){
     cout << "Start Huffman Code!!" << endl;
 
     Byte huffCodeSm1 = 0,huffCodeSm2 = 0,huffCodeSm3 = 0,huffCodeSm4 = 0;
-    uShort rlCount = 0;
+    uShort rlCount = 0, firstInd = 1;
     int rlCountControl = STEP_LENGTH ;
     while(rlCountControl <= MAX_LENGTH){
         for(Byte j = 0 ; j <= 254 ; j++)
-            for(rlCount = rlCountControl-STEP_LENGTH; rlCount <= rlCountControl ; rlCount++)
+            for(rlCount = firstInd; rlCount <= rlCountControl ; rlCount++)
             {
                 deque<Byte> huffCode;
                 if(huffCodeSm1<253){
@@ -176,8 +189,10 @@ void encoder::makeHuffmanCode(){
                 saveCode(rlCount,j,huffCode);
             }
             if(rlCountControl == MAX_LENGTH) break;
-            rlCountControl = rlCountControl < MAX_LENGTH ? rlCountControl + STEP_LENGTH : MAX_LENGTH;
+            firstInd = rlCountControl;
+            rlCountControl = rlCountControl + STEP_LENGTH < MAX_LENGTH ?rlCountControl + STEP_LENGTH:MAX_LENGTH;
     }
+    cout << "End making Huffman Code!!" << endl;
 }
 void encoder::saveCode(uShort rlCountIn, Byte symbolIn, deque<Byte> huffCodeIn){
         try{
@@ -185,10 +200,58 @@ void encoder::saveCode(uShort rlCountIn, Byte symbolIn, deque<Byte> huffCodeIn){
         huffInd = (huffInd << 8) + ((rlCountIn>>8) & 0xFF);
         huffInd = (huffInd << 8) + ((rlCountIn>>0) & 0xFF);
         huffInd = (huffInd << 8) + symbolIn;
-        cout << "huffInd:" << huffInd << endl;
+        //cout << "huffInd:" << huffInd << endl;
         huffmanCode.at(huffInd) = huffCodeIn;
-        cout << "huffInd:" << huffInd << "write!!!" << endl;
+        //cout << "huffInd:" << huffInd << "write!!!" << endl;
         }catch(exception){
             cout << "Error In Huffman save Codes!!!" << endl;
         }
+}
+
+bool encoder::test_huffmanCode(){
+    bool result=true;
+
+    int huffInd = 0;
+    uShort rlCountIn = 0;
+    Byte symbolIn;
+    deque<Byte> expHuffCode,assHuffCode;
+    makeHuffmanCode();
+
+    //case 1
+    rlCountIn = 1;
+    symbolIn = 0;
+    expHuffCode.push_back(0);
+    huffInd = (huffInd << 8) + ((rlCountIn>>8) & 0xFF);
+    huffInd = (huffInd << 8) + ((rlCountIn>>0) & 0xFF);
+    huffInd = (huffInd << 8) + symbolIn;
+    if(expHuffCode != huffmanCode.at(huffInd))result = false;
+
+    //case 2
+    rlCountIn = 1;
+    symbolIn = 2;
+    expHuffCode.clear();
+    expHuffCode.push_back(40);
+    huffInd = 0;
+    huffInd = (huffInd << 8) + ((rlCountIn>>8) & 0xFF);
+    huffInd = (huffInd << 8) + ((rlCountIn>>0) & 0xFF);
+    huffInd = (huffInd << 8) + symbolIn;
+    if(expHuffCode != huffmanCode.at(huffInd))result = false;
+
+    //case 3
+    rlCountIn = 50;
+    symbolIn = 110;
+    expHuffCode.clear();
+    expHuffCode.push_back(254);
+    expHuffCode.push_back(158);
+    expHuffCode.push_back(43);
+    huffInd = 0;
+    huffInd = (huffInd << 8) + ((rlCountIn>>8) & 0xFF);
+    huffInd = (huffInd << 8) + ((rlCountIn>>0) & 0xFF);
+    huffInd = (huffInd << 8) + symbolIn;
+    assHuffCode = huffmanCode.at(huffInd);
+    if(assHuffCode.size()>0){
+        if(expHuffCode != assHuffCode)result = false;
+    }
+
+    return result;
 }

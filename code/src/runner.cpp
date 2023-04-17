@@ -6,7 +6,7 @@
 #include <memory>
 #include <chrono>
 using namespace std;
-
+/*
 int main(int argc, int* args){
     shared_ptr<tractive> oTractive(new tractive);
 
@@ -57,5 +57,5 @@ int main(int argc, int* args){
     cout << "Tractive Stop!" << endl;
     return 0;
 }
-
+*/
 
