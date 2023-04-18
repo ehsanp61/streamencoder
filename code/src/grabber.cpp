@@ -8,7 +8,7 @@ grabber::grabber(){
  *
 */
 tuple<int,Byte> grabber::readData(){
-    std::this_thread::sleep_for(chrono::seconds(READ_FREQUENCY)); //minutes
+    std::this_thread::sleep_for(chrono::milliseconds(READ_FREQUENCY)); //minutes
     int timeStamp = chrono::duration_cast<std::chrono::seconds>(std::chrono::system_clock::now().time_since_epoch()).count();
     return {timeStamp,getRandData()};
 }

@@ -8,8 +8,6 @@
 
 
 #define FLASH_SIZE 500 // In Byte 50400
-#define BUF_ONE_ADD 0
-#define BUF_TWO_ADD FLASH_SIZE/2
 #define BUF_LEN FLASH_SIZE/2
 #define ENDOFREAD -2
 #define WAITFORREAD -1

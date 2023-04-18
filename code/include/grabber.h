@@ -7,7 +7,7 @@
 #include <thread>
 #include<tuple>
 
-#define READ_FREQUENCY 2 //Per Minutes
+#define READ_FREQUENCY 2 //Here per milliseconds in real system Per Minutes
 using namespace std;
 
 class grabber{

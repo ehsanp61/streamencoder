@@ -1,7 +1,7 @@
 #include<iostream>
 #define CXX_STANDARD 17 // C++ version
 #include "tractive.h"
-#define WAIT_FOR_SEND 20 // in Second
+#define WAIT_FOR_SEND 20 // in millisecond
 #include <thread>
 #include <memory>
 #include <chrono>
@@ -25,7 +25,7 @@ int main(int argc, int* args){
             try{
                 if(!oTractive->readyToSend){
                     std::this_thread::sleep_for(chrono::milliseconds(WAIT_FOR_SEND)); //seconds
-                    cout << "Try To Send!!!" << endl;
+                    //cout << "Try To Send!!!" << endl;
                     continue;
                 }
                 while(1){

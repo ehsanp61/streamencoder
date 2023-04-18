@@ -1,0 +1,5 @@
+#crosscompiler toolchain
+docker build arm:toolchain
+docker run -it --mount type=bind,source=J:\armChain\codes\mainsamples\Tractive\streamencoder,target=/codes/tractive arm:toolchain
+#Arm32 Machine for CD test
+docker run -it --mount type=bind,source=J:\armChain\codes\mainsamples\Tractive\streamencoder,target=/codes/tractive arm32v7/alpine

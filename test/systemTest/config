@@ -1,0 +1,1 @@
+cmake -G "Unix Makefiles" -D CMAKE_C_COMPILER=/bin/gcc -D CMAKE_CXX_COMPILER=/bin/g++ -B"Build"
