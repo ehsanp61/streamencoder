@@ -34,7 +34,7 @@ vector<Byte> gsmTransmitter::send(int mode){
  *
 */
 void gsmTransmitter::loadData(tuple<int,Byte> dataIn){
-    cout << "Send Data(" << dataCounter++ << ")" << endl;
+    //cout << "Send Data(" << dataCounter++ << ")" << endl;
     if(!state){
         state = true;
         transmitterBuffer.push_back((get<0>(dataIn) >> 24) & 0xFF);
