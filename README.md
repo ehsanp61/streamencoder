@@ -11,6 +11,7 @@ In this project a three tier encoder is designed for compressing online data str
 # Modules
 This project contains 4 modules.
 ## Grabber
+This module generates a random data in range `(0 .. 254)` as a real data which is extracted through some sensors. This module simulates sensor module of the real products. The frequency of data generation is controlled by `READ_FREQUENCY` variable before compiling in grabber.h(code/include/grabber.h) 
 ## GSM Transmitter
 ## Encoder
 ### Quantizer
